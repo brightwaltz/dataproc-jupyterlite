@@ -1,4 +1,4 @@
-"""3 冊のノートブック（.ipynb）を生成する（教員用）。python make_notebooks.py"""
+"""ノートブック（.ipynb）を生成する（教員用）。python make_notebooks.py"""
 import json
 
 def md(s): return {"cell_type": "markdown", "metadata": {}, "source": s.strip("\n")}
@@ -199,12 +199,78 @@ md("""
 - 相関が強い組み合わせに「原因と結果」があると言えるか。言えないとしたら、何が両方を増やしているか。
 """),
 ]
+
+NB4 = [
+md("""
+# 04 要約統計：Excel の結果と照らし合わせる（第3回 発展課題 B）
+
+**この課題で体験するデータ工学的な難しさ**
+1. 同じ「標準偏差」でも、道具によって計算の約束が違う（Excel の STDEV.P と STDEV.S、pandas の `std()`）。
+2. 平均の平均は、全体の平均にならない。割合を平均するときは、分母（人口）の大きさを考える。
+3. ヒストグラムの見え方は、区切りの幅で変わる。
+
+**やること**：上から順にセルを実行する（Shift + Enter）。コードは書かない。「★」のある行だけ書き換えてよい。
+"""),
+md("## 1. 道具を読み込む"),
+code("""
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib import font_manager
+font_manager.fontManager.addfont("../data/BIZUDPGothic-Regular.ttf")   # 日本語フォント（同梱）
+plt.rcParams["font.family"] = "BIZ UDPGothic"
+print("準備できました")
+"""),
+md("## 2. データを読む\n`data/todofuken_nenrei3_2020.csv` は第3回の必須課題と同じデータ（47 都道府県、2020 年）。全国の行は別のファイルにしてある。"),
+code("""
+df = pd.read_csv("../data/todofuken_nenrei3_2020.csv")
+print("行数:", len(df))
+df.head()
+"""),
+md("## 3. まとめて要約する\n`describe()` の `mean` が平均、`50%` が中央値、`std` が標準偏差。Excel の「要約」シートと見比べる。"),
+code("""
+df[["総人口_人", "65歳以上割合"]].describe()
+"""),
+md("## 4. 標準偏差を 2 通りで計算する\n`std()` と `std(ddof=0)` の 2 つを出す。どちらが Excel の STDEV.P と一致するか。"),
+code("""
+列 = "総人口_人"   # ★ "65歳以上割合" に書き換えてもよい
+print("平均      ", df[列].mean())
+print("中央値    ", df[列].median())
+print("std()     ", df[列].std())
+print("std(ddof=0)", df[列].std(ddof=0))
+"""),
+md("## 5. ヒストグラム（区切りの幅を変えてみる）\n★ `幅` を 500000（50 万人）や 2000000（200 万人）に変えて、形の見え方を比べる。"),
+code("""
+幅 = 1000000   # ★ 区切りの幅（人）
+区切り = list(range(0, 15000001, 幅))
+plt.figure(figsize=(10, 4))
+plt.hist(df["総人口_人"], bins=区切り, color="#2a78d6", edgecolor="white")
+plt.axvline(df["総人口_人"].mean(), color="#eb6834", linewidth=3, label="平均")
+plt.axvline(df["総人口_人"].median(), color="#4a3aa7", linewidth=3, linestyle="--", label="中央値")
+plt.xlabel("人口（人）"); plt.ylabel("都道府県の数"); plt.legend()
+plt.title(f"都道府県の人口の分布（区切り {幅:,} 人）")
+plt.tight_layout(); plt.show()
+"""),
+md("## 6. 全国の割合と、47 都道府県の割合の平均\n3 つの数を比べる。どれとどれが一致するか。"),
+code("""
+zen = pd.read_csv("../data/zenkoku_nenrei3_2020.csv")
+print("全国の 65 歳以上割合               ", round(zen["65歳以上割合"][0] * 100, 2), "%")
+print("47 都道府県の割合をそのまま平均    ", round(df["65歳以上割合"].mean() * 100, 2), "%")
+print("65 歳以上の合計 ÷ 総人口の合計     ", round(df["65歳以上_人"].sum() / df["総人口_人"].sum() * 100, 2), "%")
+"""),
+md("""
+## 7. 確かめること（報告書 B に書く）
+- 平均と中央値は、Excel の値と一致したか。
+- 標準偏差は、`std()` と `std(ddof=0)` のどちらが Excel の STDEV.P と一致したか。一致しなかった方は、Excel のどの関数と同じか。
+- 全国の割合と、47 都道府県の割合の平均がずれるのはなぜか。人口の多い都道府県の割合が高いか低いかを、第3回の必須課題のデータで確かめて書く。
+"""),
+]
+
 NB2[3] = code("""
 結合1 = jinko.merge(byoin, left_on="都道府県", right_on="都道府県名", how="inner")
 print("結合できた行数:", len(結合1), "/ 47")
 """)
 
-for name, cells in [("01_hajimete.ipynb", NB1), ("02_ketsugo.ipynb", NB2), ("03_sokan.ipynb", NB3)]:
+for name, cells in [("01_hajimete.ipynb", NB1), ("02_ketsugo.ipynb", NB2), ("03_sokan.ipynb", NB3), ("04_yoyaku.ipynb", NB4)]:
     with open(f"notebooks/{name}", "w", encoding="utf-8") as f:
         json.dump(nb(cells), f, ensure_ascii=False, indent=1)
     print("wrote", name)

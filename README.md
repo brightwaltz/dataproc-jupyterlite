@@ -17,6 +17,7 @@
 
 ### 中身
 - `notebooks/`：3 冊（`01_hajimete` 読む・要約・棒グラフ／`02_ketsugo` 結合と人口あたり／`03_sokan` 散布図と相関）。`make_notebooks.py` で生成。
+- `notebooks/`：要約統計（平均・中央値・標準偏差）を Excel と照合、ヒストグラムの区切り幅、全国の割合と 47 都道府県の平均の違い（第3回 発展課題 B）
 - `data/`：実データ 3 つ（統計ダッシュボード API から取得、`fetch_data.py`、出典は `SOURCES.md`）と日本語フォント（BIZ UDP ゴシック、OFL）。
 - `jupyter_lite_config.json`, `jupyter-lite.json`：サイト設定。
 - `build.sh`：ビルド。
