@@ -60,3 +60,9 @@ http://localhost:8765/ を開く。
 - 公開 URL：https://brightwaltz.github.io/dataproc-jupyterlite/lab/index.html
 - `main` に push すると `.github/workflows/deploy.yml` がビルドして Pages に出す。
 - Teams：授業チャンネルの「＋」→「Web サイト」→ 上の URL を貼る。学内ネットワークから届くかは教室で確認。
+
+## 統計ダッシュボード API の URL ビルダー（第5回 発展課題）
+
+- 公開 URL：https://brightwaltz.github.io/dataproc-jupyterlite/url-builder.html
+- 正本は `授業資料2026/05データの重要性と利活用/build_urlbuilder.py`。作り直したら `site_extra/url-builder.html` に上書きコピーして push する。
+- Teams の授業チャンネルに Web サイトタブ「URL ビルダー」として貼る。

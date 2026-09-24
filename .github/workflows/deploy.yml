@@ -30,6 +30,7 @@ jobs:
           cp notebooks/*.ipynb _stage/notebooks/
           cp data/*.csv data/*.ttf data/SOURCES.md data/OFL_*.txt _stage/data/
           jupyter lite build --contents _stage --output-dir _output
+          cp -r site_extra/. _output/   # URL ビルダーなど、サイト直下に置く静的ページ
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _output

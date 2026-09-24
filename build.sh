@@ -15,6 +15,7 @@ cp notebooks/*.ipynb "$STAGE/notebooks/"
 cp data/*.csv data/*.ttf data/SOURCES.md data/OFL_*.txt "$STAGE/data/"
 rm -rf "$OUT" .jupyterlite.doit.db
 jupyter lite build --contents "$STAGE" --output-dir "$OUT"
+cp -r site_extra/. "$OUT/"   # URL ビルダーなど
 rm -rf "$STAGE" .jupyterlite.doit.db
 echo "built: $OUT"
 echo "test:  cd \"$OUT\" && python -m http.server 8765   → http://localhost:8765/"
