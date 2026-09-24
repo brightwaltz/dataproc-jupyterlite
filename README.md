@@ -53,3 +53,10 @@ http://localhost:8765/ を開く。
 1. `data/fetch_data.py` でデータ更新 →  `SOURCES.md` の取得日を直す。
 2. `make_notebooks.py` を編集して `python make_notebooks.py`。
 3. `sh build.sh` → 配置先に上書き。
+
+## 公開先（GitHub Pages）
+
+- リポジトリ：https://github.com/brightwaltz/dataproc-jupyterlite （Drive のこのフォルダが正本、GitHub は配置用）
+- 公開 URL：https://brightwaltz.github.io/dataproc-jupyterlite/lab/index.html
+- `main` に push すると `.github/workflows/deploy.yml` がビルドして Pages に出す。
+- Teams：授業チャンネルの「＋」→「Web サイト」→ 上の URL を貼る。学内ネットワークから届くかは教室で確認。

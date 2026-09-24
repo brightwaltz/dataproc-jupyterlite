@@ -1,0 +1,5 @@
+_output/
+_stage/
+.jupyterlite.doit.db
+__pycache__/
+.ipynb_checkpoints/
