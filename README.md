@@ -4,6 +4,8 @@
 発展課題（第 8 回の相関の再現、第 6 回の 2 表の結合、第 2〜3 回の要約）で「同じ処理を数行の Python で」やるためのもの。
 学生はコードを書かない。セルは全部書いてあり、「実行」と「★の行の書き換え」だけ。
 
+このリポジトリは Claude Code（Anthropic）を使って作っています。
+
 ## 学生向け：使い方
 
 1. Teams のタブ（または配布 URL）でサイトを開く。左のファイル一覧から `notebooks/01_hajimete.ipynb` を開く。
@@ -25,7 +27,7 @@
 ```
 sh build.sh [出力先]
 ```
-既定の出力先は Claude ジョブの tmp。venv は環境変数 `JL_VENV` で差し替え可（`pip install jupyterlite-core jupyterlite-pyodide-kernel jupyter-server` が入っていればよい）。Drive にはビルド成果物を置かない（ファイル数が多く同期が重い）。
+出力先は引数で渡す（例：`sh build.sh /tmp/jl-site`）。venv は環境変数 `JL_VENV` で差し替え可（`pip install jupyterlite-core jupyterlite-pyodide-kernel jupyter-server` が入っていればよい）。Drive にはビルド成果物を置かない（ファイル数が多く同期が重い）。
 
 ローカル確認：
 ```
