@@ -86,7 +86,7 @@ byoin.head(8)
 md("## 2. そのまま結合してみる（失敗を見る）\n`merge` は Excel の VLOOKUP／XLOOKUP と同じ発想。キーが一致した行だけ残る（inner）。"),
 code("""
 結合1 = jinko.merge(byoin, left_on="都道府県", right_on="都道府県名", how="inner")
-print("結合できた行数:", len(结合1) if False else len(結合1), "/ 47")
+print("結合できた行数:", len(結合1), "/ 47")
 """),
 md("## 3. 結合できなかった行はどれか（必ず確かめる）\n`how=\"left\"` にすると、相手が見つからない行も残り、病院数が空（NaN）になる。"),
 code("""
@@ -264,11 +264,6 @@ md("""
 - 全国の割合と、47 都道府県の割合の平均がずれるのはなぜか。人口の多い都道府県の割合が高いか低いかを、第3回の必須課題のデータで確かめて書く。
 """),
 ]
-
-NB2[3] = code("""
-結合1 = jinko.merge(byoin, left_on="都道府県", right_on="都道府県名", how="inner")
-print("結合できた行数:", len(結合1), "/ 47")
-""")
 
 for name, cells in [("01_hajimete.ipynb", NB1), ("02_ketsugo.ipynb", NB2), ("03_sokan.ipynb", NB3), ("04_yoyaku.ipynb", NB4)]:
     with open(f"notebooks/{name}", "w", encoding="utf-8") as f:

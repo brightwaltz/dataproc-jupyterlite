@@ -39,8 +39,11 @@ http://localhost:8765/ を開く。
 - どちらも https になる。
 
 ### Teams の Web サイトタブに貼る
-チャンネル上部の「＋」→「Web サイト」→ 名前「発展課題（Python）」、URL に公開 URL → 保存。
-埋め込み表示できないテナント設定の場合はタブから「ブラウザーで開く」で開ける。
+授業チャンネル上部の「＋」（タブを追加）→「Web サイト」→ タブ名「発展課題（JupyterLite）」、URL は lab のトップ（下の「公開先」の URL）→ 保存。
+- タブ名は第 3・6・8 回の報告用紙の「Teams の『発展課題（JupyterLite）』タブ」と同じにする。
+- URL はノートブックを指定しないトップにする。同じタブで 02・03・04 を開くため。
+- 新しい Teams の Web サイトタブは、2024 年 7 月から一般の組織ではブラウザーの新しいタブで開く。教育機関は対象外と告知された（2024 年。続報は見つかっていない）。玉川のテナントでどう開くかは未確認。
+- Teams の中で開いた場合とブラウザーで開いた場合では、ブラウザ内の保存場所が別になることがある。学生には「始めた場所で最後まで続ける」「数値はすぐ報告用紙に写す」と伝える。
 
 ### Pyodide の制約
 - ブラウザから外部 API（統計ダッシュボード、e-Stat）を直接取りに行くと CORS で失敗しうる。**データは `data/` に同梱する**（教員が `fetch_data.py` で更新）。
@@ -59,7 +62,8 @@ http://localhost:8765/ を開く。
 - リポジトリ：https://github.com/brightwaltz/dataproc-jupyterlite （Drive のこのフォルダが正本、GitHub は配置用）
 - 公開 URL：https://brightwaltz.github.io/dataproc-jupyterlite/lab/index.html
 - `main` に push すると `.github/workflows/deploy.yml` がビルドして Pages に出す。
-- Teams：授業チャンネルの「＋」→「Web サイト」→ 上の URL を貼る。学内ネットワークから届くかは教室で確認。
+- 特定のノートブックを直接開く URL：`lab/index.html?path=notebooks/04_yoyaku.ipynb`（WebClass の案内に載せる）。例：https://brightwaltz.github.io/dataproc-jupyterlite/lab/index.html?path=notebooks/04_yoyaku.ipynb
+- Teams：上の「Teams の Web サイトタブに貼る」のとおり、タブ名「発展課題（JupyterLite）」で lab のトップの URL を貼る。学内ネットワークから届くかは教室で確認。
 
 ## 統計ダッシュボード API の URL ビルダー（第5回 発展課題）
 
