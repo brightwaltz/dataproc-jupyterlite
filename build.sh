@@ -15,6 +15,7 @@ cp notebooks/*.ipynb "$STAGE/notebooks/"
 cp data/*.csv data/*.ttf data/SOURCES.md data/OFL_*.txt "$STAGE/data/"
 rm -rf "$OUT" .jupyterlite.doit.db
 jupyter lite build --contents "$STAGE" --output-dir "$OUT"
+python patch_no_drive.py "$OUT"   # Python をファイル一覧につながない（patch_no_drive.py の説明）
 cp -r site_extra/. "$OUT/"   # URL ビルダーなど
 rm -rf "$STAGE" .jupyterlite.doit.db
 echo "built: $OUT"

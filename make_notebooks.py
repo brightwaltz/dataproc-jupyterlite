@@ -1,9 +1,48 @@
-"""ノートブック（.ipynb）を生成する（教員用）。python make_notebooks.py"""
+"""ノートブック（.ipynb）を生成する（教員用）。python make_notebooks.py
+
+データとフォントは、左のファイル一覧（../data/）からではなく、サイトから /tmp/data/ に取り込んで読む（2026-10-16）。
+../data/ を読むには JupyterLite の Service Worker が要り、それが使えない環境（Teams の中の表示、InPrivate、
+サイトのデータを保存できない設定など）では、最初のセルが [*] のまま止まって何も出力されなかったため。
+本文には今までどおり "../data/○○" と書いてよい。nb() が、最初のコードセルに取り込みのコードを入れ、読み込み先を D + "○○" に置き換える。
+"""
 import json
+import re
+
+DATA_RE = re.compile(r'"\.\./data/([\w.\-]+)"')
 
 def md(s): return {"cell_type": "markdown", "metadata": {}, "source": s.strip("\n")}
 def code(s): return {"cell_type": "code", "metadata": {}, "execution_count": None, "outputs": [], "source": s.strip("\n")}
+
+def fetch_lines(names):
+    return [
+        "# データ" + ("とフォント" if any(n.endswith(".ttf") for n in names) else "") + "を、このサイトから取り込む（Teams の中などでも止まらないように）",
+        "import os, js",
+        "from pyodide.http import pyfetch",
+        'D = "/tmp/data/"',
+        "os.makedirs(D, exist_ok=True)",
+        'サイト = str(js.location.href).split("/extensions/")[0]',
+        f"for 名前 in {names!r}:",
+        '    r = await pyfetch(サイト + "/files/data/" + 名前)',
+        '    if not r.ok: raise OSError(名前 + " を読み込めませんでした（" + str(r.status) + "）")',
+        '    open(D + 名前, "wb").write(await r.bytes())',
+    ]
+
 def nb(cells):
+    names = []
+    for c in cells:
+        if c["cell_type"] == "code":
+            for n in DATA_RE.findall(c["source"]):
+                if n not in names: names.append(n)
+    if names:
+        first = next(c for c in cells if c["cell_type"] == "code")
+        lines = first["source"].split("\n")
+        k = 0
+        while k < len(lines) and lines[k].startswith(("import ", "from ")): k += 1
+        lines[k:k] = fetch_lines(names)
+        first["source"] = "\n".join(lines)
+        for c in cells:
+            if c["cell_type"] == "code":
+                c["source"] = DATA_RE.sub(lambda m: f'D + "{m.group(1)}"', c["source"])
     return {"cells": cells, "metadata": {"kernelspec": {"display_name": "Python (Pyodide)", "language": "python", "name": "python"},
             "language_info": {"name": "python"}}, "nbformat": 4, "nbformat_minor": 5}
 
