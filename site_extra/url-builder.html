@@ -5,12 +5,12 @@
 :root{--bg:#f7f6f2;--card:#ffffff;--ink:#1b1b1b;--sub:#555;--line:#d9d6cc;--acc:#1f4e79;--accbg:#e7eef6;--ok:#2f6b2f;--warn:#9a3d00;color-scheme:light}
 @media (prefers-color-scheme:dark){:root{--bg:#1b1b1a;--card:#262624;--ink:#f1f0ea;--sub:#c3c2b7;--line:#44433f;--acc:#8fb8e8;--accbg:#233345;--ok:#8fd18f;--warn:#f0a36b;color-scheme:dark}}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"BIZ UDPGothic","Meiryo","Hiragino Sans",sans-serif;line-height:1.7}
-main{max-width:860px;margin:0 auto;padding:24px 16px 48px}
+main{max-width:760px;margin:0;padding:24px 20px 48px;box-sizing:border-box}  /* 左寄せ：Teams のタブは枠が見える範囲より広く、中央寄せだと右に寄って切れる */
 h1{font-size:1.5rem;margin:0 0 4px}.lead{color:var(--sub);margin:0 0 20px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:0 0 16px}
 label{display:block;font-weight:bold;margin:10px 0 4px}
 select,input{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%;box-sizing:border-box}
-.row{display:grid;grid-template-columns:2fr 1fr;gap:12px}@media (max-width:560px){.row{grid-template-columns:1fr}}
+.row{display:grid;grid-template-columns:2fr 1fr;gap:12px}@media (max-width:560px){.row{grid-template-columns:1fr}}.narrow .row{grid-template-columns:1fr}
 .url{font-family:Consolas,Menlo,monospace;font-size:.9rem;background:var(--accbg);border-radius:8px;padding:10px 12px;word-break:break-all}
 .url b{color:var(--acc)}
 .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
@@ -78,4 +78,14 @@ $("go").addEventListener("click", async () => {
 });
 build();
 if (location.hash === "#auto") $("go").click();   // 動作確認用（URL の末尾に #auto を付けると自動で取得する）
+// Teams の Web サイトタブでは、ページの枠が見えている範囲より広く、右側が切れる（2026-10-22）。
+// 画面の横いっぱいの見えない帯が実際に見えている幅を測り、その幅に収める（測れない環境でも左寄せで表示される）。
+const probe = document.createElement("div");
+probe.style.cssText = "position:fixed;left:0;top:0;width:100%;height:1px;opacity:0;pointer-events:none";
+document.body.appendChild(probe);
+new IntersectionObserver(([e]) => {
+  const w = Math.floor(e.intersectionRect.width); if (!w) return;
+  document.querySelector("main").style.maxWidth = Math.min(760, w) + "px";
+  document.body.classList.toggle("narrow", w < 560);
+}, { threshold: Array.from({ length: 101 }, (_, i) => i / 100) }).observe(probe);
 </script></body></html>

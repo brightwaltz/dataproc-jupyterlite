@@ -74,4 +74,5 @@ http://localhost:8765/ を開く。
 
 - 公開 URL：https://brightwaltz.github.io/dataproc-jupyterlite/url-builder.html
 - 正本は `授業資料2026/05データの重要性と利活用/build_urlbuilder.py`。作り直したら `site_extra/url-builder.html` に上書きコピーして push する。
-- Teams の授業チャンネルに Web サイトタブ「URL ビルダー」として貼る。
+- Teams の授業チャンネルに Web サイトタブ「URL ビルダー」として貼る（2026-10-22 先生作成済み。タブ名は「URLビルダー」）。
+- Teams のタブは、ページの枠が見えている範囲より広く取られることがあり（Teams 自身の帯も右端で切れる）、中央寄せのページは右に寄って右側が切れた。ページは左寄せにし、見えている幅を IntersectionObserver で測ってその幅に収める（2026-10-22）。
